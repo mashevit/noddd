@@ -10,6 +10,24 @@ var path = require('path');
 var rootPath = path.normalize(__dirname);
 app.use(express.static(rootPath));
 //console.log(rootPath);
+
+//app.use(cors({ origin: http://localhost:4200, methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'x-access-token', 'XSRF-TOKEN'], preflightContinue: false }));
+function myCors(req, res, nxt) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Access-Control-Allow-Origin, Content-Type, Accept, Accept-Language, Origin, User-Agent');
+  if(req.method === 'OPTIONS') {
+      res.sendStatus(204);
+  }
+  else {
+      nxt();
+  }
+}
+app.use(myCors);
+// app.get('/', (res, req, nxt) => {
+//     // only for adding cors on all requests
+//     nxt();
+// });
 app.use('/node_modules', express.static(rootPath + '/node_modules'))
 //app.set('port', process.env.OPENSHIFT_NODEJS_PORT || 3000);
 app.set('ipaddr', process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1");
@@ -25,8 +43,9 @@ app.set('port', process.env.OPENSHIFT_NODEJS_PORT ||  process.env.OPENSHIFT_INTE
 app.set('ip', process.env.OPENSHIFT_NODEJS_IP || process.env.OPENSHIFT_INTERNAL_IP || '0.0.0.0');
 
 
-app.get('/', function(req, res){
+app.get('/', function(req, res, nxt){
     res.sendFile(rootPath + '/index.html');
+    nxt();
 });
 app.listen(app.get('port'), app.get('ip'), function(){
     console.log("Express server listening on " + app.get('ip') + ":" + app.get('port'));
