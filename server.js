@@ -6,7 +6,7 @@ var express = require('express')
 //, uuid = require('node-uuid')
 //, Room = require('./room.js')
 //, _ = require('underscore')._;
-
+var rootPath = path.normalize(__dirname);
 app.use(express.static(rootPath));
 //console.log(rootPath);
 app.use('/node_modules', express.static(rootPath + '/node_modules'))
@@ -22,7 +22,7 @@ app.set('ipaddr', process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1");
 //app.engine('html', require('ejs').renderFile);
 app.set('port', process.env.OPENSHIFT_NODEJS_PORT ||  process.env.OPENSHIFT_INTERNAL_PORT || process.env.PORT || 8080);
 app.set('ip', process.env.OPENSHIFT_NODEJS_IP || process.env.OPENSHIFT_INTERNAL_IP || '0.0.0.0');
-var rootPath = path.normalize(__dirname);
+
 
 app.get('/', function(req, res){
     res.sendFile(rootPath + '/index.html');
