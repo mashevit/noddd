@@ -12,18 +12,39 @@ app.use(express.static(rootPath));
 //console.log(rootPath);
 
 //app.use(cors({ origin: http://localhost:4200, methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'x-access-token', 'XSRF-TOKEN'], preflightContinue: false }));
-function myCors(req, res, nxt) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Access-Control-Allow-Origin, Content-Type, Accept, Accept-Language, Origin, User-Agent');
-  if(req.method === 'OPTIONS') {
-      res.sendStatus(204);
-  }
-  else {
-      nxt();
-  }
-}
-app.use(myCors);
+// function myCors(req, res, nxt) {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Methods', 'GET,PUT,OPTIONS');
+//   res.header('Access-Control-Allow-Headers', 'Access-Control-Allow-Origin, Content-Type, Accept, Accept-Language, Origin, User-Agent');
+//   if(req.method === 'OPTIONS') {
+//       res.sendStatus(204);
+//   }
+//   else {
+//       nxt();
+//   }
+// }
+// app.use(myCors);
+
+
+// Add headers
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
 // app.get('/', (res, req, nxt) => {
 //     // only for adding cors on all requests
 //     nxt();
